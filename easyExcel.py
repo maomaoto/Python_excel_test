@@ -44,6 +44,7 @@ class easyExcel:
         shts = self.xlBook.Worksheets 
         shts(1).Copy(None,shts(1)) 
 
+
 if __name__ == "__main__": 
     """
     PNFILE = r'c:\screenshot.bmp' 
@@ -53,5 +54,14 @@ if __name__ == "__main__":
     xls.save() 
     xls.close()
     """
+    exl = easyExcel("D:\git_folder\Python_excel_test\Test_WCDMA.xlsx")
     exl.xlBook.Sheets.Count
-    exl.xlBook.Sheet(1).Name
+    for i in range(1,exl.xlBook.Sheets.Count+1):
+        print(exl.xlBook.Sheets(i).Name)
+
+    test_item = []
+    
+    for rw in exl.xlBook.Sheets("OK_Cpk").Cells.Rows:
+        if exl.xlBook.Sheets("OK_Cpk").Cells(rw.Row,1).Value:
+            test_item.append(exl.xlBook.Sheets("OK_Cpk").Cells(rw.Row,1).Value)
+        else: break
