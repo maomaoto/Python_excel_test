@@ -45,9 +45,31 @@ def read_test_items_data_sheet(data_sheet):
     for col in data_sheet.Cells.Columns:
         if data_sheet.Cells(2, col.Column).Value:
             test_items.append(data_sheet.Cells(2, col.Column).Value)
-
+        else: break
     return test_items
-            
+
+def read_SN_data(item_name, xlBook, items_each_sheet, n=10):
+    """
+    (item_name, xlBook, items_each_sheet, n=10) -> dict{SN: value}
+    Input item_name and data(xlBook, items_each_sheet)
+    Output a dict with n pairs of SN vs. value of item_name(first finded)
+    If item_name not in items_each_sheet return None
+    """
+    dict_SN_data = {}
+    for sheet_name in items_each_sheet.keys():
+        if item_name in items_each_sheet[sheet_name]:
+            for i in range(n):
+                dict_SN_data[xlBook.Sheets(sheet_name).Cells(3+i,1).Value] =\
+                    xlBook.Sheets(sheet_name).Cells(3+i,(items_each_sheet[sheet_name].index(item_name))+1).Value
+            return dict_SN_data
+
+    return None
+
+def get_number_sample_data_sheet(data_sheet):
+    """
+    data_sheet -> 
+    """
+    
 # variables
 test_items = []  # Contain all test items
 sheet_names = []  # Contain all sheet names
@@ -58,11 +80,17 @@ exl.xlApp.Visible = 1
 sheet_names = read_sheet_names(exl.xlBook)
 print(sheet_names)
 
-test_items = read_all_test_items(exl.xlBook.Sheets("OK_Cpk"))
+test_items = read_cpk_test_items(exl.xlBook.Sheets("OK_Cpk"))
 
-test_items_each_sheet = {}
-for i in sheet_names:
-    print(exl.xlBook.Sheets(i).Cells(2,1))
-    if 
+items_each_sheet = {}
+for name in sheet_names:
+    #print(exl.xlBook.Sheets(name).Cells(2,1))
+    if "Cpk" not in name:
+        items = read_test_items_data_sheet(exl.xlBook.Sheets(name))
+        if items != None: items_each_sheet[name] = items
 
+for col in exl.xlBook.Sheets('SPE1_TestReport').Columns("A:C"):
+    print(exl.xlBook.Sheets('SPE1_TestReport').Cells(2,col.Column).Value)
+for col in exl.xlBook.Sheets('SPE1_TestReport').UsedRange.Columns:
+    print(exl.xlBook.Sheets('SPE1_TestReport').Cells(2,col.Column).Value)
 #exl.close()
